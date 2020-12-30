@@ -1,28 +1,34 @@
-package com.example.Project1
+package com.example.project1
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import com.example.Project1.ui.main.SectionsPagerAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = findViewById(R.id.tabs)
-        tabs.setupWithViewPager(viewPager)
-        val fab: FloatingActionButton = findViewById(R.id.fab)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        // 뷰페이저 설정
+        val fragmentList = listOf(Fragment1(), Fragment2(), Fragment3())
+        val adapter = ViewPagerAdapter(this)
+        adapter.fragments = fragmentList
+
+        //뷰페이저와 어댑터 연결
+        view_pager.adapter = adapter
+
+        // 탭레이아웃 관리
+        TabLayoutMediator(tabs, view_pager) { tab: TabLayout.Tab, position: Int ->
+            when (position) {
+                0 -> tab.text = "Phone Book"
+                1 -> tab.text = "Gallery"
+                2 -> tab.text = "Temp"
+                else -> tab.text = "Phone Book"
+            }
+            view_pager.setCurrentItem(0)
+        }.attach()
     }
 }
