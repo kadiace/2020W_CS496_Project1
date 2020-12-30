@@ -1,4 +1,4 @@
-package com.example.tabbedtest
+package com.example.Project1
 
 import org.junit.Test
 
