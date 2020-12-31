@@ -1,13 +1,11 @@
 package com.example.project1
 
-import android.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.phonebook.view.*
-
 
 
 class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -17,16 +15,19 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         view.name.text = item.name
         view.number.text = item.number
     }
-
 }
 
-class PhoneBookListAdapter(val itemList : List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
+class PhoneBookListAdapter(val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
     override fun getItemCount() : Int {
         return itemList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneBookViewHolder {
-        val inflatedView = LayoutInflater.from(parent.context).inflate(com.example.project1.R.layout.phonebook, parent, false)
+        val inflatedView = LayoutInflater.from(parent.context).inflate(
+            com.example.project1.R.layout.phonebook,
+            parent,
+            false
+        )
         return PhoneBookViewHolder(inflatedView)
     }
 
@@ -34,6 +35,11 @@ class PhoneBookListAdapter(val itemList : List<PhoneBookData>) : RecyclerView.Ad
         val item = itemList[position]
         holder.apply {
             bind(item)
+        }
+        holder.itemView.setOnClickListener{
+            Snackbar.make(holder.itemView, "힝 속았지", Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
         }
     }
 }
