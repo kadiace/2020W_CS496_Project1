@@ -7,7 +7,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -16,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentList = listOf(Fragment1(), Fragment2(), Fragment3())
         val adapter = ViewPagerAdapter(this)
         adapter.fragments = fragmentList
+
 
         //뷰페이저와 어댑터 연결
         view_pager.adapter = adapter
