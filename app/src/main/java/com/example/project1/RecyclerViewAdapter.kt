@@ -12,8 +12,14 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     var view : View = v
 
     fun bind(item: PhoneBookData) {
-        view.name.text = item.name
-        view.number.text = item.number
+        if (item.name == null)
+            view.name.text = "null"
+        else
+            view.name.text = item.name
+        if (item.number == null)
+            view.number.text = "null"
+        else
+            view.number.text = item.number
     }
 }
 

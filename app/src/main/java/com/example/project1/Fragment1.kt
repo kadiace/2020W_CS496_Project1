@@ -15,9 +15,7 @@ import kotlinx.android.synthetic.main.fragment_1.*
  * create an instance of this fragment.
  */
 class Fragment1 : Fragment() {
-    private val BookDataList = arrayListOf<PhoneBookData>()
-
-
+    private val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,6 +23,15 @@ class Fragment1 : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view : View = inflater.inflate(R.layout.fragment_1, container, false)
+
+        val bundle : Bundle? = getArguments()
+
+        val name = bundle?.getString("name")
+        val number = bundle?.getString("number")
+        if (name != null || number != null) {
+            val data: PhoneBookData = PhoneBookData(name, number)
+            bookDataList?.add(data)
+        }
 
         return view
     }
@@ -37,17 +44,10 @@ class Fragment1 : Fragment() {
             startActivity(intent)
         }
 
-        val bundle : Bundle? = getArguments()
-
-        val data : PhoneBookData = PhoneBookData(bundle?.getString("name"),
-            bundle?.getString("number"))
-
-        BookDataList.add(data)
-
         // use a linear layout manager
         phone_book_list.layoutManager = LinearLayoutManager(context)
 
         // specify an adapter (see also next example)
-        phone_book_list.adapter = PhoneBookListAdapter(BookDataList)
+        phone_book_list.adapter = bookDataList?.let { PhoneBookListAdapter(it) }
     }
 }
