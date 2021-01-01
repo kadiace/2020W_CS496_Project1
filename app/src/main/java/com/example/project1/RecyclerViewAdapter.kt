@@ -1,10 +1,15 @@
 package com.example.project1
 
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.phonebook.view.*
 
 
@@ -23,7 +28,7 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     }
 }
 
-class PhoneBookListAdapter(val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
+class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
     override fun getItemCount() : Int {
         return itemList.size
     }
@@ -43,9 +48,24 @@ class PhoneBookListAdapter(val itemList: List<PhoneBookData>) : RecyclerView.Ada
             bind(item)
         }
         holder.itemView.setOnClickListener{
-            Snackbar.make(holder.itemView, "힝 속았지", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .show()
+
+            // Set context, intent.
+            val context = holder.view.context
+            val intent = Intent(context, ItemActivity::class.java)
+
+            // Set variables for bundle
+            val name = item.name
+            val number = item.number
+
+            // Bundle을 통해서 전달
+            val bundle = Bundle()
+            bundle.putString("name", name)
+            bundle.putString("number", number)
+            bundle.putInt("position", position)
+
+            intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
+
+            mContext.startActivity(intent)
         }
     }
 }

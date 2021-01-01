@@ -28,7 +28,7 @@ class Fragment1 : Fragment() {
 
         val name = bundle?.getString("name")
         val number = bundle?.getString("number")
-        if (name != null || number != null) {
+        if (name != "" && number !=""&&name != null && number != null) {
             val data: PhoneBookData = PhoneBookData(name, number)
             bookDataList?.add(data)
         }
@@ -48,6 +48,6 @@ class Fragment1 : Fragment() {
         phone_book_list.layoutManager = LinearLayoutManager(context)
 
         // specify an adapter (see also next example)
-        phone_book_list.adapter = bookDataList?.let { PhoneBookListAdapter(it) }
+        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> PhoneBookListAdapter(it1, it) } }
     }
 }
