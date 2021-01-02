@@ -70,14 +70,19 @@ class Fragment1 : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fab.setOnClickListener {
+
+            // Change Activity.
             val intent = Intent(context, AddActivity::class.java)
             startActivity(intent)
+
+            // 액티비티 종료
+            activity?.finish()
         }
 
-        // use a linear layout manager
+        // adapting recyclerview.
         phone_book_list.layoutManager = LinearLayoutManager(context)
-
-        // specify an adapter (see also next example)
-        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> PhoneBookListAdapter(it1, it) } }
+        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> activity?.let { it2 ->
+            PhoneBookListAdapter(it2, it1, it)
+        } } }
     }
 }

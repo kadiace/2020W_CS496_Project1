@@ -1,41 +1,35 @@
 package com.example.project1
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add.*
-import kotlinx.android.synthetic.main.phonebook.view.*
+import kotlinx.android.synthetic.main.phonebook_item.view.*
 
 
 class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     var view : View = v
 
     fun bind(item: PhoneBookData) {
-        if (item.name == null)
-            view.name.text = "null"
-        else
-            view.name.text = item.name
-        if (item.number == null)
-            view.number.text = "null"
-        else
-            view.number.text = item.number
+        view.name.text = item.name
+        view.number.text = item.number
     }
 }
 
-class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
+class PhoneBookListAdapter(val mActivity : Activity, val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
     override fun getItemCount() : Int {
         return itemList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneBookViewHolder {
         val inflatedView = LayoutInflater.from(parent.context).inflate(
-            com.example.project1.R.layout.phonebook,
+            com.example.project1.R.layout.phonebook_item,
             parent,
             false
         )
@@ -50,8 +44,7 @@ class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookDa
         holder.itemView.setOnClickListener{
 
             // Set context, intent.
-            val context = holder.view.context
-            val intent = Intent(context, ItemActivity::class.java)
+            val intent = Intent(mContext, ItemActivity::class.java)
 
             // Set variables for bundle
             val name = item.name
@@ -66,6 +59,9 @@ class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookDa
             intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
 
             mContext.startActivity(intent)
+
+            // 액티비티 종료
+            mActivity.finish()
         }
     }
 }

@@ -1,11 +1,13 @@
 package com.example.project1
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_edit.*
 
 class EditActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
@@ -24,6 +26,7 @@ class EditActivity : AppCompatActivity() {
 
 
         edit_button.setOnClickListener{
+
             // 화면전환 (intent 객체 생성)
             val outent = Intent(this, MainActivity::class.java)
 
@@ -41,6 +44,9 @@ class EditActivity : AppCompatActivity() {
             outent.putExtras(bundle)    // intent 객체에 Bundle을 저장
 
             startActivity(outent)
+
+            // 액티비티 종료
+            finish();
         }
     }
 }

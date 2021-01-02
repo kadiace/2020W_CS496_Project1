@@ -1,14 +1,15 @@
 package com.example.project1
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.phonebook.*
 
 class MainActivity : AppCompatActivity() {
+
+    var lastTimeBackPressed : Long = -1;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         val type = intent.getIntExtra("type", -1)
 
         when(type){
-            0-> {
+            0 -> {   // Add
                 val name = intent.getStringExtra("name")
                 val number = intent.getStringExtra("number")
 
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                 // fragment1로 번들 전달
                 fragment1.arguments = bundle
             }
-            1-> {
+            1 -> {   // Edit
                 val name = intent.getStringExtra("name")
                 val number = intent.getStringExtra("number")
                 val position = intent.getIntExtra("position", 0)
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 // fragment1로 번들 전달
                 fragment1.arguments = bundle
             }
-            2-> {
+            2 -> {   // Delete
                 val position = intent.getIntExtra("position", 0)
 
                 // bundle 객체 생성, contents 저장
@@ -81,5 +82,17 @@ class MainActivity : AppCompatActivity() {
             }
             view_pager.setCurrentItem(0)
         }.attach()
+    }
+
+    override fun onBackPressed() {
+        if(System.currentTimeMillis() - lastTimeBackPressed < 2000){
+            finish()
+            return
+        }
+        Snackbar.make(view_pager, "뒤로가기 버튼을 한번 더 눌러 종료", Snackbar.LENGTH_LONG)
+            .setAction("Action", null)
+            .show()
+        lastTimeBackPressed = System.currentTimeMillis();
+
     }
 }
