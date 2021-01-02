@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:hint="Search"
             android:background="@color/white"
+            android:textColor="@color/purple_200"
             android:textSize="24sp"
             app:layout_scrollFlags="scroll|enterAlways" />
 

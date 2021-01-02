@@ -18,7 +18,6 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
     fun bind(item: PhoneBookData) {
         view.name.text = item.name
-        view.number.text = item.number
     }
 }
 
