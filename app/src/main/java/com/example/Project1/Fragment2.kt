@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Project1.ImageData
 import com.example.Project1.GalleryAdapter
+import com.example.Project1.GridItemDecoration
 import kotlinx.android.synthetic.main.fragment_2.view.*
 import java.io.File
 import java.io.IOException
@@ -50,6 +51,7 @@ class Fragment2 : Fragment() {
         val folderDataset = mutableListOf<ImageData>()
         val countImages = mutableListOf<Int>()
         val folderId = mutableListOf<Long>()
+        print(ImageDataset.size)
 
         val condition: (ImageData, ImageData) -> Boolean =
             { mdf1: ImageData, mdf2: ImageData -> mdf1.bucketID == mdf2.bucketID }
@@ -64,6 +66,7 @@ class Fragment2 : Fragment() {
         }
 
         val recyclerview: RecyclerView = view.gallery
+        recyclerview.addItemDecoration(GridItemDecoration(10))
         recyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         recyclerview.adapter = GalleryAdapter(requireContext(), ImageDataset, countImages)
     }
@@ -96,8 +99,8 @@ class Fragment2 : Fragment() {
         val sortOrder = "${MediaStore.Files.FileColumns.DATE_TAKEN} DESC"
         val cursor = context.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            //projection,
-            null,
+            projection,
+            //null,
             null,
             null,
             sortOrder
@@ -158,25 +161,7 @@ class Fragment2 : Fragment() {
     }
 
 
-    private fun checkGalleryPermission() {
-        //스토리지 읽기 퍼미션을 permission 변수에 담는다
-        val permission = context?.let {
-            // context가 null이 아닐 경우만 시행
-//            ContextCompat.checkSelfPermission(
-//                it, Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        //val permission = ContextCompat.checkSelfPermission(getContext(),
-        //            Manifest.permission.READ_EXTERNAL_STORAGE)
 
-        //현재 안드로이드 버전이 ~~미만이면 메서드를 종료한다.
-//        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-//            return
-
-//        if(permission != PackageManager.PERMISSION_DENIED){
-        //imgFromGallery()
-//            title.setText("YEP")
-//        }
-    }
 }
 
     /*
