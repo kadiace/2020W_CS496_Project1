@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_1.*
 
 /**
@@ -26,11 +27,40 @@ class Fragment1 : Fragment() {
 
         val bundle : Bundle? = getArguments()
 
-        val name = bundle?.getString("name")
-        val number = bundle?.getString("number")
-        if (name != "" && number !=""&&name != null && number != null) {
-            val data: PhoneBookData = PhoneBookData(name, number)
-            bookDataList?.add(data)
+        val type = bundle?.getInt("type")
+
+        when(type){
+            0-> {
+                val name = bundle?.getString("name")
+                val number = bundle?.getString("number")
+                if (name != "" && number !="" && name != null && number != null) {
+                    val data: PhoneBookData = PhoneBookData(name, number)
+                    bookDataList?.add(data)
+                }
+                else {
+                    Snackbar.make(view, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null)
+                        .show()
+                }
+            }
+            1-> {
+                val name = bundle?.getString("name")
+                val number = bundle?.getString("number")
+                val position = bundle?.getInt("position")
+                if (name != "" && number !="" && name != null && number != null) {
+                    val data: PhoneBookData = PhoneBookData(name, number)
+                    bookDataList?.set(position, data)
+                }
+                else {
+                    Snackbar.make(view, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null)
+                        .show()
+                }
+            }
+            2-> {
+                val position = bundle?.getInt("position")
+                bookDataList?.removeAt(position)
+            }
         }
 
         return view

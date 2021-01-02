@@ -8,7 +8,7 @@
     tools:context=".ItemActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout"
+        android:id="@+id/layout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/purple_200"
@@ -34,19 +34,53 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/text_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/layout" />
+        app:layout_constraintTop_toBottomOf="@id/layout1">
 
-    <TextView
-        android:id="@+id/text_number"
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            android:text="Name : "
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toRightOf="@id/name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/text_name"/>
+        app:layout_constraintTop_toBottomOf="@id/layout2">
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            android:text="Number : "
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/text_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toRightOf="@id/number" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
