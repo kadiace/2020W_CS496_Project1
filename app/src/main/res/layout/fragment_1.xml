@@ -30,7 +30,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/purple_200"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context="com.example.project1.Fragment1"
         tools:listitem="@layout/phonebook_item"
@@ -42,6 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/purple_200"
+        app:tint="@android:color/white"
         app:srcCompat="@android:drawable/ic_input_add"
         app:layout_scrollFlags="scroll"/>
 
