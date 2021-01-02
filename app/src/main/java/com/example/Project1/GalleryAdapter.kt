@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,11 +22,23 @@ import java.util.*
 class GalleryAdapter(val context: Context?, private val datasetList : List<ImageData>, private val folderImageNum : MutableList<Int>) :
         RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>(){
 
+    var mPosition = 0
+    fun getPosition(): Int{
+        return mPosition
+    }
+    fun setPosition(position:Int){
+        mPosition = position
+    }
+
     inner class GalleryViewHolder(v: View) : RecyclerView.ViewHolder(v){
         private val gridImage = v.findViewById<ImageView>(R.id.imageView)
         @RequiresApi(Build.VERSION_CODES.P)
         fun bind(item: ImageData, context: Context){
             val uri = item.contentUri
+            //Log.i("display",position.toString())
+            //print(position)
+            // if getPosition == 0:
+            // add camerabtn
 
             //val context : Context
             //context.resources.getIdentifier(item.contentUri, "drawable", context.packageName)
@@ -41,13 +54,7 @@ class GalleryAdapter(val context: Context?, private val datasetList : List<Image
             gridImage.setImageBitmap(bitmap)
         }
     }
-    var mPosition = 0
-    fun getPosition(): Int{
-        return mPosition
-    }
-    fun setPosition(position:Int){
-        mPosition = position
-    }
+
 
     fun addItem(new : ImageData){
         //datasetList.add(new)
