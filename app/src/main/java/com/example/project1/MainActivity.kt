@@ -1,5 +1,6 @@
 package com.example.project1
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -10,10 +11,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     var lastTimeBackPressed : Long = -1;
+    lateinit var act : Activity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        act = this
 
         // AddActivity의 intent를 받아 저장, 받을 fragment 정의
         val intent = getIntent()
@@ -75,10 +79,23 @@ class MainActivity : AppCompatActivity() {
         // 탭레이아웃 관리
         TabLayoutMediator(tabs, view_pager) { tab: TabLayout.Tab, position: Int ->
             when (position) {
-                0 -> tab.text = "Phone Book"
-                1 -> tab.text = "Gallery"
-                2 -> tab.text = "Temp"
-                else -> tab.text = "Phone Book"
+                0 -> {
+                    tab.text = "Contact"
+                    tab.setIcon(R.drawable.contactbook)
+                }
+                1 -> {
+                    tab.text = "Gallery"
+                    tab.setIcon(R.drawable.gallery)
+                }
+
+                2 -> {
+                    tab.text = "Temp"
+                    tab.setIcon(R.drawable.checkmark)
+                }
+                else -> {
+                    tab.text = "Phone Book"
+                    tab.setIcon(R.drawable.contactbook)
+                }
             }
             view_pager.setCurrentItem(0)
         }.attach()

@@ -19,7 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textSize="30sp"
+            android:textColor="@color/white"
             android:layout_margin="1dp"
+            android:maxLines="1"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -88,6 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/purple_200"
+        app:borderWidth="0dp"
         app:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -99,6 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/purple_200"
+        app:borderWidth="0dp"
         app:tint="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/edit_button"
         app:layout_constraintRight_toRightOf="parent"

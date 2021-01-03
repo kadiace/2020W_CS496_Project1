@@ -8,9 +8,13 @@ import kotlinx.android.synthetic.main.activity_item.*
 
 class ItemActivity : AppCompatActivity() {
 
+    lateinit var act : Activity
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
+
+        act = this
 
         // 여러 인텐트를 구분하기 위한 Request code
         val DELETE_CODE : Int = 2
@@ -38,12 +42,12 @@ class ItemActivity : AppCompatActivity() {
             intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
 
             startActivity(intent)       // 화면전환
-
-            // 액티비티 종료
-            finish();
         }
 
         delete_button.setOnClickListener{
+
+//            //기존의 main activity 제거
+//            MainActivity().act.finish()
 
             // 화면전환 (intent 객체 생성), Main
             val intent = Intent(this, MainActivity::class.java)

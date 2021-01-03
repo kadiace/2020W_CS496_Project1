@@ -2,9 +2,14 @@ package com.example.project1
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add.*
+
 
 class AddActivity : AppCompatActivity() {
 
@@ -31,11 +36,28 @@ class AddActivity : AppCompatActivity() {
             bundle.putInt("type", ADD_CODE)
 
             intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
-
             startActivity(intent)
 
             // 액티비티 종료
             finish()
         }
     }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val focusView: View? = currentFocus
+        if (focusView != null) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            val x = ev.x.toInt()
+            val y = ev.y.toInt()
+            if (!rect.contains(x, y)) {
+                val imm: InputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(focusView.getWindowToken(), 0)
+                focusView.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
 }

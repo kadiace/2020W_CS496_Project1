@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_1.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -36,6 +38,7 @@ class Fragment1 : Fragment() {
                 if (name != "" && number !="" && name != null && number != null) {
                     val data: PhoneBookData = PhoneBookData(name, number)
                     bookDataList?.add(data)
+                    Collections.sort(bookDataList)
                 }
                 else {
                     Snackbar.make(view, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
@@ -50,6 +53,7 @@ class Fragment1 : Fragment() {
                 if (name != "" && number !="" && name != null && number != null) {
                     val data: PhoneBookData = PhoneBookData(name, number)
                     bookDataList?.set(position, data)
+                    Collections.sort(bookDataList)
                 }
                 else {
                     Snackbar.make(view, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
@@ -74,15 +78,10 @@ class Fragment1 : Fragment() {
             // Change Activity.
             val intent = Intent(context, AddActivity::class.java)
             startActivity(intent)
-
-            // 액티비티 종료
-            activity?.finish()
         }
 
         // adapting recyclerview.
         phone_book_list.layoutManager = LinearLayoutManager(context)
-        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> activity?.let { it2 ->
-            PhoneBookListAdapter(it2, it1, it)
-        } } }
+        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> PhoneBookListAdapter(it1, it) } }
     }
 }

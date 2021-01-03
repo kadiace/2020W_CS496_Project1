@@ -21,7 +21,7 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     }
 }
 
-class PhoneBookListAdapter(val mActivity : Activity, val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
+class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
     override fun getItemCount() : Int {
         return itemList.size
     }
@@ -58,9 +58,6 @@ class PhoneBookListAdapter(val mActivity : Activity, val mContext: Context, val 
             intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
 
             mContext.startActivity(intent)
-
-            // 액티비티 종료
-            mActivity.finish()
         }
     }
 }

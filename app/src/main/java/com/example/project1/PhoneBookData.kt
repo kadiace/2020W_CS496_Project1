@@ -6,7 +6,7 @@ import android.os.Parcelable
 class PhoneBookData(
     val name: String?,
     val number: String?
-) : Parcelable {
+) : Parcelable, Comparable<PhoneBookData> {
     constructor(source: Parcel) : this(
         source.readString(),
         source.readString()
@@ -25,5 +25,9 @@ class PhoneBookData(
         override fun newArray(size: Int): Array<PhoneBookData?> {
             return arrayOfNulls(size)
         }
+    }
+
+    override fun compareTo(other: PhoneBookData): Int {
+        return compareValues(this.name, other.name)
     }
 }
