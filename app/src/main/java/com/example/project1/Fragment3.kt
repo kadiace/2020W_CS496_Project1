@@ -34,5 +34,10 @@ class Fragment3 : Fragment() {
             activity?.startActivityForResult(intent, 2)
         }
 
+        game2.setOnClickListener{
+            val intent = Intent(context, GameActivity2::class.java)
+            activity?.startActivityForResult(intent, 2)
+        }
+
     }
 }

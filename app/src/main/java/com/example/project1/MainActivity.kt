@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
                     tab.text = "Gallery"
                     tab.setIcon(R.drawable.gallery)
                 }
-
                 2 -> {
                     tab.text = "Alcohol"
                     tab.setIcon(R.drawable.beer)
