@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 2 -> {
-                    tab.text = "Temp"
-                    tab.setIcon(R.drawable.checkmark)
+                    tab.text = "Alcohol"
+                    tab.setIcon(R.drawable.beer)
                 }
                 else -> {
                     tab.text = "Phone Book"
@@ -109,5 +109,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         view_pager.adapter = mAdapter
+        view_pager.setCurrentItem(requestCode)
     }
 }
