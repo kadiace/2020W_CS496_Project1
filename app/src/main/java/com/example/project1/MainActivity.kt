@@ -1,7 +1,12 @@
 package com.example.project1
 
 import android.app.Activity
+import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -11,70 +16,23 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     var lastTimeBackPressed : Long = -1;
-    lateinit var act : Activity
+    val mAdapter = ViewPagerAdapter(this)
+
+    //request code
+    val FRAG1_CODE : Int = 0
+    val FRAG2_CODE : Int = 1
+    val FRAG3_CODE : Int = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        act = this
-
-        // AddActivity의 intent를 받아 저장, 받을 fragment 정의
-        val intent = getIntent()
-        val fragment1 = Fragment1()
-
-
-        val type = intent.getIntExtra("type", -1)
-
-        when(type){
-            0 -> {   // Add
-                val name = intent.getStringExtra("name")
-                val number = intent.getStringExtra("number")
-
-                // bundle 객체 생성, contents 저장
-                val bundle = Bundle()
-                bundle.putString("name", name)
-                bundle.putString("number", number)
-                bundle.putInt("type", type)
-
-                // fragment1로 번들 전달
-                fragment1.arguments = bundle
-            }
-            1 -> {   // Edit
-                val name = intent.getStringExtra("name")
-                val number = intent.getStringExtra("number")
-                val position = intent.getIntExtra("position", 0)
-
-                // bundle 객체 생성, contents 저장
-                val bundle = Bundle()
-                bundle.putString("name", name)
-                bundle.putString("number", number)
-                bundle.putInt("position", position)
-                bundle.putInt("type", type)
-
-                // fragment1로 번들 전달
-                fragment1.arguments = bundle
-            }
-            2 -> {   // Delete
-                val position = intent.getIntExtra("position", 0)
-
-                // bundle 객체 생성, contents 저장
-                val bundle = Bundle()
-                bundle.putInt("position", position)
-                bundle.putInt("type", type)
-
-                // fragment1로 번들 전달
-                fragment1.arguments = bundle
-            }
-        }
-
         // 뷰페이저 설정
-        val fragmentList = listOf(fragment1, Fragment2(), Fragment3())
-        val adapter = ViewPagerAdapter(this)
-        adapter.fragments = fragmentList
+        val fragmentList = listOf(Fragment1(), Fragment2(), Fragment3())
+        mAdapter.fragments = fragmentList
 
         //뷰페이저와 어댑터 연결
-        view_pager.adapter = adapter
+        view_pager.adapter = mAdapter
 
         // 탭레이아웃 관리
         TabLayoutMediator(tabs, view_pager) { tab: TabLayout.Tab, position: Int ->
@@ -110,6 +68,46 @@ class MainActivity : AppCompatActivity() {
             .setAction("Action", null)
             .show()
         lastTimeBackPressed = System.currentTimeMillis();
+    }
 
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val focusView: View? = currentFocus
+        if (focusView != null) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            val x = ev.x.toInt()
+            val y = ev.y.toInt()
+            if (!rect.contains(x, y)) {
+                val imm: InputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(focusView.getWindowToken(), 0)
+                focusView.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            // From Fragment1
+            0-> {
+                if (resultCode == 1) {
+                    view_pager.let {
+                        Snackbar.make(it, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
+                }
+                mAdapter.fragments[0].onActivityResult(requestCode, resultCode, data)
+            }
+            1-> {
+                mAdapter.fragments[1].onActivityResult(requestCode, resultCode, data)
+            }
+            2-> {
+                mAdapter.fragments[2].onActivityResult(requestCode, resultCode, data)
+            }
+        }
+
+        view_pager.adapter = mAdapter
     }
 }

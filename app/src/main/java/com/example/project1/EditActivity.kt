@@ -8,16 +8,16 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.activity_edit.*
+import java.util.*
 
 class EditActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
-
-        // EDIT REQUEST CODE
-        val EDIT_CODE : Int = 1
 
         // get Intent
         val inIntent = getIntent()
@@ -30,27 +30,26 @@ class EditActivity : AppCompatActivity() {
 
 
         edit_button.setOnClickListener{
-//            //기존의 main, item activity 제거
-//            MainActivity().act.finish()
-//            ItemActivity().act.finish()
 
-            // 화면전환 (intent 객체 생성)
-            val outent = Intent(this, MainActivity::class.java)
+            // EDIT REQUEST CODE
+            val EDIT_CODE : Int = 0
+            val EDIT_FAIL : Int = 1
 
-            // 입력된 데이터 받기
+            //
             name = edit_name.text.toString()
             number = edit_number.text.toString()
 
-            // Bundle을 통해서 전달
-            val bundle = Bundle()
-            bundle.putString("name", name)
-            bundle.putString("number", number)
-            bundle.putInt("position", position)
-            bundle.putInt("type", EDIT_CODE)
-
-            outent.putExtras(bundle)    // intent 객체에 Bundle을 저장
-
-            startActivity(outent)
+            // PhoneBookDataList에 추가
+            val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
+            if (name != "" && number !="" && name != null && number != null) {
+                val data: PhoneBookData = PhoneBookData(name, number)
+                bookDataList?.set(position, data)
+                Collections.sort(bookDataList)
+                setResult(EDIT_CODE)
+            }
+            else {
+                setResult(EDIT_FAIL)
+            }
 
             // 액티비티 종료
             finish();

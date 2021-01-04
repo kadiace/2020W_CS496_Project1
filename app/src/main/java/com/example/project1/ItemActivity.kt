@@ -4,26 +4,31 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.make
 import kotlinx.android.synthetic.main.activity_item.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_1.*
+import java.util.ArrayList
 
 class ItemActivity : AppCompatActivity() {
 
-    lateinit var act : Activity
+    var position : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
 
-        act = this
-
-        // 여러 인텐트를 구분하기 위한 Request code
+        // 여러 인텐트를 구분하기 위한 result code
         val DELETE_CODE : Int = 2
 
         // AddActivity의 intent를 받아 저장.
         val intent = getIntent()
         val name = intent.getStringExtra("name")
         val number = intent.getStringExtra("number")
-        val position = intent.getIntExtra("position", 0)
+        position = intent.getIntExtra("position", 0)
 
         text_name.text = name
         text_number.text = number
@@ -38,32 +43,34 @@ class ItemActivity : AppCompatActivity() {
             val bundle = Bundle()
             bundle.putString("name", name)
             bundle.putString("number", number)
+            bundle.putInt("position", position)
 
             intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
 
-            startActivity(intent)       // 화면전환
+            startActivityForResult(intent, 0)       // 화면전환
         }
 
         delete_button.setOnClickListener{
 
-//            //기존의 main activity 제거
-//            MainActivity().act.finish()
-
-            // 화면전환 (intent 객체 생성), Main
-            val intent = Intent(this, MainActivity::class.java)
-
-            // bundle 객체 생성, contents 저장
-            val bundle = Bundle()
-            bundle.putInt("position", position)
-            bundle.putInt("type", DELETE_CODE)
-
-            intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
-
-            startActivity(intent)       // 화면전환
-
+            val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
+            bookDataList?.removeAt(position)
+            setResult(DELETE_CODE)
             // 액티비티 종료
             finish();
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 1) {
+            this.window.decorView.let {
+                Snackbar.make(it as View, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            }
+        }
+        val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
+        text_name.text = bookDataList?.get(position)!!.name
+        text_number.text = bookDataList?.get(position).number
     }
 }

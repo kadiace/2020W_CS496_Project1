@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.phonebook_item.view.*
+import kotlin.text.contains as textContains
 
 
 class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -21,7 +23,7 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     }
 }
 
-class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
+class PhoneBookListAdapter(val search : String, val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
     override fun getItemCount() : Int {
         return itemList.size
     }
@@ -36,9 +38,14 @@ class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookDa
     }
 
     override fun onBindViewHolder(holder: PhoneBookViewHolder, position: Int) {
+
+        val ITEM_CODE = 1
         val item = itemList[position]
-        holder.apply {
-            bind(item)
+        if (item.name!!.textContains(search, true))
+        {
+            holder.apply {
+                bind(item)
+            }
         }
         holder.itemView.setOnClickListener{
 
@@ -57,7 +64,7 @@ class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookDa
 
             intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
 
-            mContext.startActivity(intent)
+            startActivityForResult(mContext as Activity, intent, 0, bundle)
         }
     }
 }
