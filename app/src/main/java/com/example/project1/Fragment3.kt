@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_3.*
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +39,5 @@ class Fragment3 : Fragment() {
             val intent = Intent(context, GameActivity2::class.java)
             activity?.startActivityForResult(intent, 2)
         }
-
     }
 }

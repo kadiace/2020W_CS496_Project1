@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 mAdapter.fragments[0].onActivityResult(requestCode, resultCode, data)
+                view_pager.adapter = mAdapter
             }
             FRAG2_CODE-> {
                 mAdapter.fragments[1].onActivityResult(requestCode, resultCode, data)
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        view_pager.adapter = mAdapter
-        view_pager.setCurrentItem(requestCode)
+//        view_pager.adapter = mAdapter
+//        view_pager.setCurrentItem(requestCode)
     }
 }

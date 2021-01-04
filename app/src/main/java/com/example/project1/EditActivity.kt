@@ -31,7 +31,7 @@ class EditActivity : AppCompatActivity() {
 
         edit_button.setOnClickListener{
 
-            // EDIT REQUEST CODE
+            // EDIT RESULT CODE
             val EDIT_CODE : Int = 0
             val EDIT_FAIL : Int = 1
 
