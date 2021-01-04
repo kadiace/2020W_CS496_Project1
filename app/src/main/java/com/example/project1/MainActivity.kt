@@ -1,19 +1,28 @@
 package com.example.project1
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.yesButton
 
 class MainActivity : AppCompatActivity() {
+    private val REQ_STORAGE_PERMISSION = 1
 
     var lastTimeBackPressed : Long = -1;
     val mAdapter = ViewPagerAdapter(this)
@@ -57,6 +66,35 @@ class MainActivity : AppCompatActivity() {
             }
             view_pager.setCurrentItem(0)
         }.attach()
+
+        checkGalleryPermission(cancel = {showPermissionInfoDialog()}, ok = {})
+    }
+
+    /////////////////////////tab2
+    private fun checkGalleryPermission(cancel: () -> Unit, ok: () -> Unit) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {  // <PERMISSION_DENIED가 반환됨>
+            // 이전에 사용자가 앱 권한을 허용하지 않았을 때 -> 왜 허용해야되는지 알람을 띄움
+            // shouldShowRequestPermissionRationale메소드는 이전에 사용자가 앱 권한을 허용하지 않았을 때 ture를 반환함
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            ) {
+                cancel()
+            }
+            // 앱 처음 실행했을 때
+            else
+            // 권한 요청 알림
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQ_STORAGE_PERMISSION
+                )
+        } else // 앱에 권한이 허용됨
+            ok()
     }
 
     override fun onBackPressed() {
@@ -69,6 +107,38 @@ class MainActivity : AppCompatActivity() {
             .show()
         lastTimeBackPressed = System.currentTimeMillis();
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            // () 사용에 대한 사용자의 요청)일 때
+            REQ_STORAGE_PERMISSION -> {
+                // 요청이 비허용일 때
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    toast("권한 거부 됨")
+                    finish()
+                }
+            }
+        }
+    }
+    // 사용자가 이전에 권한을 거부했을 때 호출된다.
+    private fun showPermissionInfoDialog() {
+        alert("갤러리 사진을 가져오려면 권한이 필수로 필요합니다", "") {
+            yesButton {
+                // 권한 요청
+                ActivityCompat.requestPermissions(
+                    //this@MapsActivity,
+                    this@MainActivity,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQ_STORAGE_PERMISSION
+                )
+            }
+            noButton {
+                toast("권한 거부 됨")
+                finish()
+            }
+        }.show()
+    }
+    /////////////////////////tab2
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         val focusView: View? = currentFocus
@@ -107,7 +177,7 @@ class MainActivity : AppCompatActivity() {
                 mAdapter.fragments[2].onActivityResult(requestCode, resultCode, data)
             }
         }
-
         view_pager.adapter = mAdapter
+        view_pager.setCurrentItem(requestCode)
     }
 }
