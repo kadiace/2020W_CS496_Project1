@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             // From Fragment1
-            0-> {
+            FRAG1_CODE-> {
                 if (resultCode == 1) {
                     view_pager.let {
                         Snackbar.make(it, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
@@ -100,10 +100,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 mAdapter.fragments[0].onActivityResult(requestCode, resultCode, data)
             }
-            1-> {
+            FRAG2_CODE-> {
                 mAdapter.fragments[1].onActivityResult(requestCode, resultCode, data)
             }
-            2-> {
+            FRAG3_CODE-> {
                 mAdapter.fragments[2].onActivityResult(requestCode, resultCode, data)
             }
         }
