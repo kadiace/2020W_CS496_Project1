@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.make
@@ -64,10 +65,7 @@ class ItemActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == 1) {
-            this.window.decorView.let {
-                Snackbar.make(it as View, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-            }
+            Toast.makeText(this, "이름과 번호를 정확히 입력해주세요!", Toast.LENGTH_LONG).show()
         }
         val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
         text_name.text = bookDataList?.get(position)!!.name

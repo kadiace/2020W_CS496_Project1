@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -56,8 +57,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 2 -> {
-                    tab.text = "Temp"
-                    tab.setIcon(R.drawable.checkmark)
+                    tab.text = "Alcohol"
+                    tab.setIcon(R.drawable.beer)
                 }
                 else -> {
                     tab.text = "Phone Book"
@@ -163,21 +164,20 @@ class MainActivity : AppCompatActivity() {
             // From Fragment1
             0-> {
                 if (resultCode == 1) {
-                    view_pager.let {
-                        Snackbar.make(it, "이름과 번호를 정확히 입력해주세요!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
-                    }
+                    Toast.makeText(this, "이름과 번호를 정확히 입력해주세요!", Toast.LENGTH_LONG).show()
                 }
                 mAdapter.fragments[0].onActivityResult(requestCode, resultCode, data)
+                view_pager.adapter = mAdapter
+                view_pager.setCurrentItem(requestCode)
             }
             1-> {
                 mAdapter.fragments[1].onActivityResult(requestCode, resultCode, data)
+                view_pager.adapter = mAdapter
+                view_pager.setCurrentItem(requestCode)
             }
             2-> {
                 mAdapter.fragments[2].onActivityResult(requestCode, resultCode, data)
             }
         }
-        view_pager.adapter = mAdapter
-        view_pager.setCurrentItem(requestCode)
     }
 }
