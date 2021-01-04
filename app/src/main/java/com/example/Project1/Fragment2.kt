@@ -2,6 +2,7 @@ package com.example.project1
 
 import android.Manifest
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -30,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.BuildConfig
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -75,7 +77,7 @@ class Fragment2 : Fragment() {
         val countImages = mutableListOf<Int>()
         val folderId = mutableListOf<Long>()
         print(ImageDataset.size)
-
+        /*
         val condition: (ImageData, ImageData) -> Boolean =
             { mdf1: ImageData, mdf2: ImageData -> mdf1.bucketID == mdf2.bucketID }
         ImageDataset.forEach {
@@ -86,7 +88,7 @@ class Fragment2 : Fragment() {
             } else {
                 countImages[folderId.indexOf(it.bucketID)] += 1
             }
-        }
+        }*/
 
         val recyclerview: RecyclerView = view.gallery
         recyclerview.addItemDecoration(GridItemDecoration(10))
@@ -108,47 +110,9 @@ class Fragment2 : Fragment() {
         }*/
     }
 
+    private val REQUEST_TAKE_PHOTO = 10
+    private val REQ_CAMERA_PERMISSION = 100
     private fun takePicture(){
-        mCamera?.takePicture(null, null, mPicture)
-    }
-
-    private  val mPicture = Camera.PictureCallback{ data, _ ->
-        val pictureFile: File = getOutputMediaFile(MEDIA_IMAGE_TYPE) ?: run{
-            Log.d("BasicCamera", ("Errorcreating media file, check storage permissions"))
-            return@PictureCallback
-        }
-        try{
-            val fos = FileOutputStream(pictureFile)
-            var realImage : Bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
-            var exif = ExifInterface(pictureFile.toString())
-            Log.d("EXIF value", exif.getAttribute(ExifInterface.TAG_ORIENTATION))
-
-            if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equals("6")){
-                realImage = rotate(realImage, 90f)
-            }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equals("8")){
-                realImage = rotate(realImage, 270f)
-            }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equals("3")){
-                realImage = rotate(realImage, 180f)
-            }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equals("0")){
-                realImage = rotate(realImage, 90f)
-            }
-            realImage.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-            fos.close()
-            sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://$pictureFile")))
-        }catch(e: FileNotFoundException) {
-            Toast.makeText(this, "file not found : ${e.message}", Toast.LENGTH_SHORT).show()
-            Log.d("BasicCamera", "File not found : ${e.message}")
-        }catch(e: IOException) {
-            Toast.makeText(this, "IOException : ${e.message}", Toast.LENGTH_SHORT).show()
-            Log.d("BasicCamera", "IOException : ${e.message}")
-        }
-    }
-    
-
-    private val REQ_CAMERA_PERMISSION = 2
-    private val REQ_IMAGE_CAPTURE = 3
-
-    private fun getImagefromCamera(){
         var permission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
         if(permission == PackageManager.PERMISSION_DENIED){
             //권한 없어서 요청
@@ -159,18 +123,36 @@ class Fragment2 : Fragment() {
             if(TextUtils.equals(state, Environment.MEDIA_MOUNTED)){
                 var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 var pm = requireContext().packageManager
-                intent.resolveActivity(pm)?.let{
-                    var photoFile:File? = createImageFile()
-                    photoFile?.let{
-                        var photoUri = FileProvider.getUriForFile(requireContext(), BuildConfig.APPLICATION_ID + ".provider", it)
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                        startActivityForResult(intent, REQ_IMAGE_CAPTURE)
+                intent.resolveActivity(pm)?.also{
+                    val photoFile: File? = try {
+                        createImageFile()
+                    } catch (ex: IOException) {
+                        // Error occurred while creating the File
+                        Log.d("test", "error: $ex")
+                        null
+                    }
+                    // photoUri를 보내는 코드
+                    photoFile?.also {
+                        val photoURI: Uri = FileProvider.getUriForFile(
+                            requireContext(),
+                            BuildConfig.APPLICATION_ID + ".provider", it)
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        startActivityForResult(intent, REQUEST_TAKE_PHOTO)
                     }
                 }
             }
         }
     }
-    lateinit var imagePath: String
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            galleryAddPic()
+            setPic()
+        }
+    }
+
+    private lateinit var currentPhotoPath: String
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp : String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -180,56 +162,42 @@ class Fragment2 : Fragment() {
             ".jpg",
             storageDir
         ).apply{
-            imagePath = absolutePath
+            currentPhotoPath = absolutePath
+            Log.d("test", "currentPhotoPath : $currentPhotoPath")
         }
-        /*var file = File(Environment.getExternalStorageDirectory(), "/path/")
-        if(!file.exists()) file.mkdir()
-        var imageName = "fileName.jpeg"
-        var imageFile = File("${Environment.getExternalStorageDirectory().absoluteFile}/path/", "$imageName")
-        imagePath = imageFile.absolutePath
-        return imageFile
-
-         */
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == Activity.RESULT_OK){
-
-            //Toast.makeText(context, "Start Camera", Toast.LENGTH_SHORT).show()
-            /*
-            val file = File(imagePath)
-            if(Build.VERSION.SDK_INT < 28){
-                val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver,Uri.fromFile(file))
-                //img_picture.setImageBitmap(bitmap)
-            }else{
-                //val decode = ImageDecoder.createSource(activity?.contentResolver, Uri.fromFile(file))
-                //val bitmap = ImageDecoder.decodeBitmap(decode)
-            }
-
-             */
-            when(requestCode){
-                REQ_IMAGE_CAPTURE->{
-                    imagePath?.apply{
-                        //ctSelectImage.visibility = View.VISIBLE
-                        //GlideUtil.loadImage(activity = this@MealsCommentActivity,
-                        //requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true),
-                        //image= imagePath,
-                        //imageView = ivSelectImage,
-                            /*
-                        requestListener = object : RequestListener<Drawable>{
-                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>, isFirstResource: Boolean): Boolean{
-                                hideLodading()
-                                return false
-                            }
-                        })
-                        */
-                        //checkInput()
-
-                    }
-                }
-            }
+    // 갤러리에 파일을 추가하는 함수.
+    private fun galleryAddPic() {
+        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
+            Log.d("test", "currentPhotoPath2 : $currentPhotoPath")
+            val f = File(currentPhotoPath)
+            mediaScanIntent.data = Uri.fromFile(f)
+            getActivity()?.sendBroadcast(mediaScanIntent)
         }
+    }
+
+    private fun setPic(){
+        //addItem(new : ImageData)
+        val ImageDataset = getFileList(requireContext(), MediaStoreFileType.IMAGE)
+        val folderDataset = mutableListOf<ImageData>()
+        val countImages = mutableListOf<Int>()
+        val folderId = mutableListOf<Long>()
+        //val condition: (ImageData, ImageData) -> Boolean =
+        //    { mdf1: ImageData, mdf2: ImageData -> mdf1.bucketID == mdf2.bucketID }
+        //ImageDataset.forEach {
+            //if (listContainsContitionedItem(folderDataset, it, condition).not()) {
+            //    folderDataset.add(it)
+            //    countImages.add(1)
+            //    folderId.add(it.bucketID)
+            //} else {
+            //    countImages[folderId.indexOf(it.bucketID)] += 1
+            //}
+        //}
+        val MDF = ImageData(contentUri)
+        ImageDataset.add(MDF)
+        mAdapter.notifyItemInserted(0)
+
     }
 
     private fun getFileList(context: Context, type: MediaStoreFileType): List<ImageData> {
@@ -275,7 +243,7 @@ class Fragment2 : Fragment() {
                     "test",
                     "id: $id, display_name: $displayName, date_taken: $dateTaken, content_uri: $contentUri\n"
                 )
-                val MDF = ImageData(id, dateTaken, displayName, contentUri, bucketID, bucketName)
+                val MDF = ImageData(contentUri)
                 imageList.add(MDF)
             }
         }

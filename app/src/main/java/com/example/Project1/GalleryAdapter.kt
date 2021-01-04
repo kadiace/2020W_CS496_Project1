@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.grid_item.view.*
 import java.util.*
 
 
-class GalleryAdapter(val context: Context?, private val datasetList : List<ImageData>, private val folderImageNum : MutableList<Int>) :
+class GalleryAdapter(val context: Context?, private val datasetList : MutableList<ImageData>, private val folderImageNum : MutableList<Int>) :
         RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>(){
 
     var mPosition = 0
@@ -57,13 +57,13 @@ class GalleryAdapter(val context: Context?, private val datasetList : List<Image
 
 
     fun addItem(new : ImageData){
-        //datasetList.add(new)
+        datasetList.add(new)
         notifyDataSetChanged()
     }
 
     fun removeItem(position : Int){
         if (position>0){
-            //datasetList.removeAt(position)
+            datasetList.removeAt(position)
             notifyDataSetChanged()
         }
     }
