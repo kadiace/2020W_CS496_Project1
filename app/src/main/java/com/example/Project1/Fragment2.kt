@@ -29,6 +29,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.BuildConfig
@@ -41,10 +43,7 @@ import com.example.Project1.GalleryAdapter
 import com.example.Project1.GridItemDecoration
 import kotlinx.android.synthetic.main.fragment_2.*
 import kotlinx.android.synthetic.main.fragment_2.view.*
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -52,15 +51,7 @@ class Fragment2 : Fragment() {
     //private val Gallery = 0
     //private var imageList = emptyArray<Image>()
 
-        /*
-    override fun onCreate(savedInstanceState : Bundle?){
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_2)
-
-    }*/
-
     private lateinit var mCamera : Camera
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,30 +64,17 @@ class Fragment2 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val ImageDataset = getFileList(requireContext(), MediaStoreFileType.IMAGE)
+        var mutableImageDataset = ImageDataset.toMutableList()
         val folderDataset = mutableListOf<ImageData>()
         val countImages = mutableListOf<Int>()
         val folderId = mutableListOf<Long>()
         print(ImageDataset.size)
-        /*
-        val condition: (ImageData, ImageData) -> Boolean =
-            { mdf1: ImageData, mdf2: ImageData -> mdf1.bucketID == mdf2.bucketID }
-        ImageDataset.forEach {
-            if (listContainsContitionedItem(folderDataset, it, condition).not()) {
-                folderDataset.add(it)
-                countImages.add(1)
-                folderId.add(it.bucketID)
-            } else {
-                countImages[folderId.indexOf(it.bucketID)] += 1
-            }
-        }*/
-
         val recyclerview: RecyclerView = view.gallery
         recyclerview.addItemDecoration(GridItemDecoration(10))
         recyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
-        recyclerview.adapter = GalleryAdapter(requireContext(), ImageDataset, countImages)
+        recyclerview.adapter = GalleryAdapter(requireContext(), mutableImageDataset, countImages)
 
         fab.setOnClickListener{
-            //getImagefromCamera()
             takePicture()
         }
         /*
@@ -119,37 +97,46 @@ class Fragment2 : Fragment() {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), REQ_CAMERA_PERMISSION)
         }else{
             //권한 있음
-            var state = Environment.getExternalStorageState()
-            if(TextUtils.equals(state, Environment.MEDIA_MOUNTED)){
-                var intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                var pm = requireContext().packageManager
-                intent.resolveActivity(pm)?.also{
-                    val photoFile: File? = try {
-                        createImageFile()
-                    } catch (ex: IOException) {
-                        // Error occurred while creating the File
-                        Log.d("test", "error: $ex")
-                        null
-                    }
-                    // photoUri를 보내는 코드
-                    photoFile?.also {
-                        val photoURI: Uri = FileProvider.getUriForFile(
-                            requireContext(),
-                            BuildConfig.APPLICATION_ID + ".provider", it)
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        startActivityForResult(intent, REQUEST_TAKE_PHOTO)
-                    }
-                }
-            }
+            var capture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(capture, REQUEST_TAKE_PHOTO)
+            /*
+            val ImageDataset = getFileList(requireContext(), MediaStoreFileType.IMAGE)
+            var newImageDataset = ImageDataset.toMutableList()
+            val MDF = ImageData(Uri.parse(currentPhotoPath))
+            newImageDataset.add(MDF)
+
+            val recyclerview: RecyclerView = view!!.gallery
+            val mAdapter = recyclerview.adapter
+            mAdapter?.notifyItemInserted(0)
+
+             */
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            galleryAddPic()
-            setPic()
+        if(resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_TAKE_PHOTO) {
+                var bundle: Bundle? = data?.getExtras()
+                var bitmap: Bitmap = bundle?.get("data") as Bitmap
+                var changedUri: Uri = BitmapToUri(this.requireContext(), bitmap)
+                //galleryAddPic()
+                //setPic()
+                refreshFragment(this, requireActivity().supportFragmentManager)
+            }
         }
+    }
+
+    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager){
+        var ft: FragmentTransaction = fragmentManager.beginTransaction()
+        ft.detach(fragment).attach(fragment).commit()
+    }
+
+    fun BitmapToUri(context: Context, bitmap: Bitmap): Uri {
+        var bytes =  ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
     }
 
     private lateinit var currentPhotoPath: String
@@ -178,26 +165,14 @@ class Fragment2 : Fragment() {
     }
 
     private fun setPic(){
-        //addItem(new : ImageData)
         val ImageDataset = getFileList(requireContext(), MediaStoreFileType.IMAGE)
-        val folderDataset = mutableListOf<ImageData>()
-        val countImages = mutableListOf<Int>()
-        val folderId = mutableListOf<Long>()
-        //val condition: (ImageData, ImageData) -> Boolean =
-        //    { mdf1: ImageData, mdf2: ImageData -> mdf1.bucketID == mdf2.bucketID }
-        //ImageDataset.forEach {
-            //if (listContainsContitionedItem(folderDataset, it, condition).not()) {
-            //    folderDataset.add(it)
-            //    countImages.add(1)
-            //    folderId.add(it.bucketID)
-            //} else {
-            //    countImages[folderId.indexOf(it.bucketID)] += 1
-            //}
-        //}
-        val MDF = ImageData(contentUri)
-        ImageDataset.add(MDF)
-        mAdapter.notifyItemInserted(0)
+        var newImageDataset = ImageDataset.toMutableList()
+        val MDF = ImageData(Uri.parse(currentPhotoPath))
+        newImageDataset.add(MDF)
 
+        val recyclerview: RecyclerView = view!!.gallery
+        val mAdapter = recyclerview.adapter
+        mAdapter?.notifyItemInserted(0)
     }
 
     private fun getFileList(context: Context, type: MediaStoreFileType): List<ImageData> {
@@ -276,105 +251,3 @@ class Fragment2 : Fragment() {
 
 
 }
-
-    /*
-    private val OPEN_GALLERY = 1
-    private fun displayGalleryImg(){
-        val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.setType("image/*")
-        startActivityForResult(intent, OPEN_GALLERY)
-    }
-
-    @Override
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == Activity.RESULT_OK){
-            if(requestCode == OPEN_GALLERY){
-                var currentImageUrl : Uri? = data?.data
-                try {
-                    //val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImageUrl)
-                    //imageList.add(currentImageUrl)
-                }catch(e:Exception){
-                    e.printStackTrace()
-                }
-                val allpath = data?.getStringArrayExtra("all_path")
-                if (allpath != null) {
-                    for (string in allpath){
-                        var item : Image? = null
-                        //item?.sdcardPath = string
-                        //imageList.add(string)
-                    }
-                }
-            }
-        }else{
-            Log.d("ActivityResult", "something wrong")
-        }
-    }*/
-
-    ///////////LOCAL///////////
-    private fun displayLocalImg() {
-        /*
-        val imageIDs: IntArray = intArrayOf(
-            R.drawable.img_01,
-            R.drawable.img_02,
-            R.drawable.img_03,
-            R.drawable.img_04,
-            R.drawable.img_05,
-            R.drawable.img_06,
-            R.drawable.img_07,
-            R.drawable.img_08,
-            R.drawable.img_09,
-            R.drawable.img_11
-        )
-        var n:Int = imageIDs.size
-
-         */
-        /*
-        // 사진들을 보여줄 GridView 뷰의 어댑터 객체를 정의하고 그것을 이 뷰의 어댑터로 설정합니다.
-        Log.i("display","1")
-        var gridview: GridView = view!!.findViewById(R.id.gridView)
-        Log.i("display","2")
-        val adapter = GalleryAdapter(context, imageList)
-        Log.i("display","3")
-        gridview.adapter = adapter
-        Log.i("display","4")*/
-    }
-
-
-
-}
-
-//    private fun imgFromGallery(){ // load image
-//        checkPermission()
-//        val intent = Intent()
-//        intent.type = "image/*"
-//        intent.action = Intent.ACTION_GET_CONTENT
-//        startActivityForResult(Intent.createChooser(intent, "Load Picture"), Gallery)
-
-        //Intent intent = new Intent(Intent.ACTION_PICK);
-        //                    intent.setType
-        //                            (android.provider.MediaStore.Images.Media.CONTENT_TYPE);
-        //                    startActivityForResult(intent, RequestCode.PICK_IMAGE);
-//    }
-
-    /*
-    @Override
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == Gallery){
-            if(resultCode == RESULT_OK){
-                var dataUri = data?.data
-                try{
-                    var bitmap : Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, dataUri)
-                    imageView.setImageBitmap(bitmap)}
-                catch(e:Exception){
-                    Toast.makeText(this, "$e", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else{
-                //something wrong
-            }
-        }
-    }
-
-     */
