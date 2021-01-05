@@ -1,18 +1,12 @@
 package com.example.project1
 
-import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.Snackbar.make
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_item.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_1.*
-import java.util.ArrayList
+import java.util.*
 
 class ItemActivity : AppCompatActivity() {
 
@@ -60,15 +54,34 @@ class ItemActivity : AppCompatActivity() {
             finish();
         }
 
+        call_button.setOnClickListener{
+            var phoneNumber = "tel:"
+            phoneNumber += number?.get(0)
+            phoneNumber += number?.get(1)
+            phoneNumber += number?.get(2)
+            phoneNumber += "-"
+            phoneNumber += number?.get(3)
+            phoneNumber += number?.get(4)
+            phoneNumber += number?.get(5)
+            phoneNumber += number?.get(6)
+            phoneNumber += "-"
+            phoneNumber += number?.get(7)
+            phoneNumber += number?.get(8)
+            phoneNumber += number?.get(9)
+            phoneNumber += number?.get(10)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(phoneNumber))
+            startActivity(intent)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == 1) {
+        if (resultCode == -1) {
             Toast.makeText(this, "이름과 번호를 정확히 입력해주세요!", Toast.LENGTH_LONG).show()
+        } else {
+            val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
+            text_name.text = bookDataList?.get(resultCode)!!.name
+            text_number.text = bookDataList?.get(resultCode).number
         }
-        val bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
-        text_name.text = bookDataList?.get(position)!!.name
-        text_number.text = bookDataList?.get(position).number
     }
 }

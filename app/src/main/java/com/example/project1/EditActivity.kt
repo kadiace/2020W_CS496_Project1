@@ -1,15 +1,11 @@
 package com.example.project1
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_add.*
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_edit.*
 import java.util.*
 
@@ -32,8 +28,7 @@ class EditActivity : AppCompatActivity() {
         edit_button.setOnClickListener{
 
             // EDIT REQUEST CODE
-            val EDIT_CODE : Int = 0
-            val EDIT_FAIL : Int = 1
+            val EDIT_FAIL : Int = -1
 
             //
             name = edit_name.text.toString()
@@ -45,7 +40,11 @@ class EditActivity : AppCompatActivity() {
                 val data: PhoneBookData = PhoneBookData(name, number)
                 bookDataList?.set(position, data)
                 Collections.sort(bookDataList)
-                setResult(EDIT_CODE)
+                bookDataList?.forEachIndexed{ index, phoneBookData ->
+                    if (phoneBookData.equals(data)) {
+                        setResult(index)
+                    }
+                }
             }
             else {
                 setResult(EDIT_FAIL)

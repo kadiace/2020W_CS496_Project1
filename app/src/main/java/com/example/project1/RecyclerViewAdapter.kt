@@ -3,14 +3,13 @@ package com.example.project1
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.phonebook_item.view.*
 import kotlin.text.contains as textContains
 
@@ -46,6 +45,24 @@ class PhoneBookListAdapter(val search : String, val mContext: Context, val itemL
             holder.apply {
                 bind(item)
             }
+        }
+        holder.view.call_button.setOnClickListener{
+            var phoneNumber = "tel:"
+            phoneNumber += item.number?.get(0)
+            phoneNumber += item.number?.get(1)
+            phoneNumber += item.number?.get(2)
+            phoneNumber += "-"
+            phoneNumber += item.number?.get(3)
+            phoneNumber += item.number?.get(4)
+            phoneNumber += item.number?.get(5)
+            phoneNumber += item.number?.get(6)
+            phoneNumber += "-"
+            phoneNumber += item.number?.get(7)
+            phoneNumber += item.number?.get(8)
+            phoneNumber += item.number?.get(9)
+            phoneNumber += item.number?.get(10)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(phoneNumber))
+            mContext.startActivity(intent)
         }
         holder.itemView.setOnClickListener{
 
