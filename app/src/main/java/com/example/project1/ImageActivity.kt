@@ -1,11 +1,5 @@
 package com.example.Project1
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
-import android.widget.ImageView
-import com.example.project1.R
-
 /*
 public class ImageActivity : Activity {
     override fun onCreate(savedInstanceState : Bundle?){
@@ -20,6 +14,4 @@ public class ImageActivity : Activity {
         val imageID : Int = (Int)receivedIntent.getExtras().get("image ID")
         imageView.setImageResource(imageID)
     }
-}
-
- */
+}*/

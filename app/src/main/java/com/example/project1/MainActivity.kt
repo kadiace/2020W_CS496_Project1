@@ -1,7 +1,6 @@
 package com.example.project1
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
@@ -85,7 +84,11 @@ class MainActivity : AppCompatActivity() {
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 )
             ) {
-                cancel()
+                //cancel()
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQ_STORAGE_PERMISSION
+                )
             }
             // 앱 처음 실행했을 때
             else

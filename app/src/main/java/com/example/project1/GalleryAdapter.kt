@@ -1,22 +1,15 @@
 package com.example.Project1
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project1.R
-import kotlinx.android.synthetic.main.grid_item.view.*
-import java.util.*
 
 
 class GalleryAdapter(val context: Context?, private val datasetList : MutableList<ImageData>, private val folderImageNum : MutableList<Int>) :
@@ -88,7 +81,10 @@ class GalleryAdapter(val context: Context?, private val datasetList : MutableLis
             holder.bind(item, context)
 
             holder.itemView.setOnClickListener{
-                    v -> setPosition(position)
+                //val intent = Intent(context, ImageActivity)
+                //intent.putExtra("FUCK", getPosition())
+                //context.startActivity(intent)
+
                 //Toast.makeText(v.context, "click", Toast.LENGTH_SHORT).show()
                 //open another activity
                 //val intent = Intent(context, AnotherActivity::class.java)
