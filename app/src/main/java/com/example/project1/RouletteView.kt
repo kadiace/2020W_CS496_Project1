@@ -82,7 +82,7 @@ class RouletteView@JvmOverloads constructor(
         }
 
         canvas?.drawArc(pos_center-40f, pos_center-220f,
-            pos_center+40f, pos_center-140f
+            pos_center+40f, pos_center-80f
             , 255f, 30f,true, paintHand)
 
 

@@ -49,16 +49,16 @@ class GameActivity4 : AppCompatActivity() {
         rouletteView = roulette
 
         start.setOnClickListener {
-            Toast.makeText(this, "animation", Toast.LENGTH_LONG).show()
-            rouletteView.velocity += 50f
-            mainhandler!!.postDelayed(update, 10)
+            if (itemList.isNotEmpty()) {
+                rouletteView.velocity += 50f
+                mainhandler!!.postDelayed(update, 10)
+            }
         }
 
         add.setOnClickListener {
             val text = edit_text.text.toString()
             if (text != "" && text != null) {
                 itemList.add(text)
-                Toast.makeText(this, "추가", Toast.LENGTH_LONG).show()
                 rouletteView.manageCircle(itemList)
             } else {
                 Toast.makeText(this, "정확히 입력해주세요", Toast.LENGTH_LONG).show()
