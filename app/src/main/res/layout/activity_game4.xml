@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GameActivity3">
+    tools:context=".GameActivity4">
 
     <androidx.cardview.widget.CardView
         android:id = "@+id/title"
@@ -30,110 +30,55 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+    <androidx.cardview.widget.CardView
+        android:id = "@+id/roulette_card"
+        android:layout_width="200sp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="8dp"
+        app:contentPadding="10dp"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintBottom_toTopOf="@id/layout2">
+        app:layout_constraintBottom_toTopOf="@id/layout2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" >
 
-        <androidx.cardview.widget.CardView
-            android:id = "@+id/game1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:contentPadding="10dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/game2">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-            <TextView
-                android:id="@+id/game1_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="동물"
-                android:fontFamily="@font/dreamhouseb"/>
+            <com.example.project1.RouletteView
+                android:id="@+id/roulette"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-        </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.cardview.widget.CardView
-            android:id = "@+id/game2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:contentPadding="10dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <TextView
-                android:id="@+id/game2_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="직업"
-                android:fontFamily="@font/dreamhouseb"/>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id = "@+id/game3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:contentPadding="10dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/game2"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <TextView
-                android:id="@+id/game3_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="영화"
-                android:fontFamily="@font/dreamhouseb"/>
-
-        </androidx.cardview.widget.CardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:layout_constraintTop_toBottomOf="@id/layout1">
+        app:layout_constraintTop_toBottomOf="@id/roulette_card">
 
         <androidx.cardview.widget.CardView
-            android:id = "@+id/number"
+            android:id = "@+id/edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
             app:contentPadding="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/add">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            app:layout_constraintRight_toRightOf="parent">
 
                 <EditText
                     android:id="@+id/edit_text"
@@ -146,8 +91,6 @@
                     android:fontFamily="@font/dreamhouseb"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -163,14 +106,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toLeftOf="@id/edit">
 
                 <TextView
                     android:id="@+id/add_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="추가!"
+                    android:text="추가"
                     android:fontFamily="@font/dreamhouseb"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -180,7 +123,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id = "@+id/start"
+            android:id = "@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -190,15 +133,15 @@
             app:contentPadding="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/add"
+            app:layout_constraintLeft_toRightOf="@+id/edit"
             app:layout_constraintRight_toRightOf="parent">
 
             <TextView
-                android:id="@+id/start_text"
+                android:id="@+id/delete_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:text="시작!"
+                android:text="삭제"
                 android:fontFamily="@font/dreamhouseb"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -213,14 +156,38 @@
         android:id="@+id/layout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         app:layout_constraintTop_toBottomOf="@id/layout2">
 
         <androidx.cardview.widget.CardView
-            android:id = "@+id/explain"
+            android:id = "@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/answer">
+
+        <TextView
+            android:id="@+id/start_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:gravity="center_horizontal"
+            android:text="시작"
+            android:fontFamily="@font/dreamhouseb"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
             app:contentPadding="10dp"
@@ -230,12 +197,38 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <TextView
-                android:id="@+id/text_explain"
+                android:id="@+id/answer_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:text="당첨은?"
+                android:fontFamily="@font/dreamhouseb"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id = "@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:contentPadding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/answer"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/reset_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:gravity="center_horizontal"
-                android:text="사람을 추가하고 시작!\n나만 아니면 돼~~~!!!"
+                android:text="리셋"
                 android:fontFamily="@font/dreamhouseb"/>
 
         </androidx.cardview.widget.CardView>
@@ -246,6 +239,7 @@
         android:id = "@+id/not_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
         app:contentPadding="10dp"
@@ -255,11 +249,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="240dp"
-            android:layout_height="167dp"
-            app:srcCompat="@drawable/notme2"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="494dp" />
+            android:layout_width="200dp"
+            android:layout_height="139dp"
+            app:srcCompat="@drawable/notme2" />
 
     </androidx.cardview.widget.CardView>
 

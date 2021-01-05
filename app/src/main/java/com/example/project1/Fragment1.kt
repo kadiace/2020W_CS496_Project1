@@ -1,17 +1,16 @@
 package com.example.project1
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.android.synthetic.main.fragment_1.*
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_1.view.*
 import kotlin.collections.ArrayList
 
 /**
@@ -21,6 +20,8 @@ import kotlin.collections.ArrayList
  */
 class Fragment1 : Fragment() {
     private var bookDataList : ArrayList<PhoneBookData>? = BookDataList.getInstance()
+    private var searchList = mutableListOf<PhoneBookData>()
+    private var searchText: String = null.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,17 +42,51 @@ class Fragment1 : Fragment() {
             activity?.startActivityForResult(intent, 0)
         }
 
-        // adapting recyclerview.
+        bookDataList = BookDataList.getInstance()
+
+        setSearchListener(search_name)
+
         phone_book_list.layoutManager = LinearLayoutManager(context)
-        val search = search_name.text.toString()
-        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> PhoneBookListAdapter(search, it1, it) } }
+        phone_book_list.adapter = context?.let { it1 -> PhoneBookListAdapter(it1,
+            searchList as ArrayList<PhoneBookData>) }
+    }
+
+    private fun setSearchListener(view: View) {
+        view.search_name.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchText = s.toString()
+                searchList = bookDataList?.let { getPhoneNumbers(searchText, it) } as MutableList<PhoneBookData>
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         bookDataList = BookDataList.getInstance()
+
+        setSearchListener(search_name)
+
         phone_book_list.layoutManager = LinearLayoutManager(context)
-        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> PhoneBookListAdapter(
-            null.toString(), it1, it) } }
+        phone_book_list.adapter = context?.let { it1 -> PhoneBookListAdapter(it1,
+            searchList as ArrayList<PhoneBookData>) }
+    }
+
+    fun getPhoneNumbers(name:String, datalist : ArrayList<PhoneBookData>) : List<PhoneBookData> {
+
+        // init value
+        var resultList = mutableListOf<PhoneBookData>()
+
+        if (name.isNotEmpty()) {
+            for (i in 0..datalist!!.size-1) {
+                if (datalist?.get(i)?.name!!.contains(name,false)) {
+                    resultList.add(datalist?.get(i)!!)
+                }
+            }
+        } else {
+            resultList = datalist!!
+        }
+        return resultList
     }
 }
