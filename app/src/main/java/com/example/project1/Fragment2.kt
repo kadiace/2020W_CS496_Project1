@@ -38,9 +38,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.example.Project1.ImageData
-import com.example.Project1.GalleryAdapter
-import com.example.Project1.GridItemDecoration
+import com.example.project1.ImageData
+import com.example.project1.GalleryAdapter
+import com.example.project1.GridItemDecoration
 import kotlinx.android.synthetic.main.fragment_2.*
 import kotlinx.android.synthetic.main.fragment_2.view.*
 import java.io.*

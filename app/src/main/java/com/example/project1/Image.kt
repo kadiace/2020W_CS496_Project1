@@ -1,7 +1,6 @@
-package com.example.Project1
+package com.example.project1
 
 import android.net.Uri
-import java.util.*
 
 class ImageData (//var id : Long,
     //var dateTaken: Date,

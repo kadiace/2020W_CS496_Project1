@@ -1,4 +1,4 @@
-package com.example.Project1
+package com.example.project1
 
 import android.content.Context
 import android.graphics.ImageDecoder
@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.example.project1.R
 
 
 class GalleryAdapter(val context: Context?, private val datasetList : MutableList<ImageData>, private val folderImageNum : MutableList<Int>) :
