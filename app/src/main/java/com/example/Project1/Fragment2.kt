@@ -173,7 +173,7 @@ class Fragment2 : Fragment() {
         val MDF = ImageData(Uri.parse(currentPhotoPath))
         newImageDataset.add(MDF)
 
-        val recyclerview: RecyclerView = view!!.gallery
+        val recyclerview: RecyclerView = requireView().gallery
         val mAdapter = recyclerview.adapter
         mAdapter?.notifyItemInserted(0)
     }

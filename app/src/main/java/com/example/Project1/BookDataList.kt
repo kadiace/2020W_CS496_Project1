@@ -1,5 +1,7 @@
 package com.example.project1
 
+import android.content.Context
+
 
 class BookDataList private constructor() {
     companion object {
@@ -13,7 +15,6 @@ class BookDataList private constructor() {
             PhoneBookData("함창수","01078462423"),
             PhoneBookData("류석영 교수님","01024673463")
         )
-
 
         @JvmStatic fun getInstance(): ArrayList<PhoneBookData>? =
             instance ?: synchronized(this) {

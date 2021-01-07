@@ -1,19 +1,19 @@
 package com.example.project1
-
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.ImageDecoder
 import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
-
-
 class GalleryAdapter(val context: Context?, private val datasetList : MutableList<ImageData>, private val folderImageNum : MutableList<Int>) :
     RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>(){
-
     var mPosition = 0
     fun getPosition(): Int{
         return mPosition
@@ -21,7 +21,6 @@ class GalleryAdapter(val context: Context?, private val datasetList : MutableLis
     fun setPosition(position:Int){
         mPosition = position
     }
-
     inner class GalleryViewHolder(v: View) : RecyclerView.ViewHolder(v){
         private val gridImage = v.findViewById<ImageView>(R.id.imageView)
         @RequiresApi(Build.VERSION_CODES.P)
@@ -31,7 +30,6 @@ class GalleryAdapter(val context: Context?, private val datasetList : MutableLis
             //print(position)
             // if getPosition == 0:
             // add camerabtn
-
             //val context : Context
             //context.resources.getIdentifier(item.contentUri, "drawable", context.packageName)
             /*
@@ -46,24 +44,19 @@ class GalleryAdapter(val context: Context?, private val datasetList : MutableLis
             gridImage.setImageBitmap(bitmap)
         }
     }
-
-
     fun addItem(new : ImageData){
         datasetList.add(new)
         notifyDataSetChanged()
     }
-
     fun removeItem(position : Int){
         if (position>0){
             datasetList.removeAt(position)
             notifyDataSetChanged()
         }
     }
-
     override fun getItemCount() : Int{
         return datasetList.size
     }
-
     override fun onCreateViewHolder(parent : ViewGroup, viewType: Int): GalleryViewHolder{
         val inflatedView = LayoutInflater.from(parent.context).inflate(
             com.example.project1.R.layout.grid_item,
@@ -72,27 +65,29 @@ class GalleryAdapter(val context: Context?, private val datasetList : MutableLis
         )
         return GalleryViewHolder(inflatedView)
     }
-
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int){
         val item = datasetList[position]
         if (context != null) {
             holder.bind(item, context)
-
-            holder.itemView.setOnClickListener{
+            holder.itemView.setOnClickListener(object : View.OnClickListener{
+                override fun onClick(v: View?){
+                    val intent = Intent(context, ImageActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putString("uri", item.contentUri.toString())
+                    intent.putExtras(bundle)    // intent 객체에 Bundle을 저장
+                    ActivityCompat.startActivityForResult(context as Activity, intent, 1, bundle)
+                }
                 //val intent = Intent(context, ImageActivity)
                 //intent.putExtra("FUCK", getPosition())
                 //context.startActivity(intent)
-
                 //Toast.makeText(v.context, "click", Toast.LENGTH_SHORT).show()
                 //open another activity
-                //val intent = Intent(context, AnotherActivity::class.java)
+                //
                 //val ImageViewClickListener : ImageClickListener = (ImageClickListener(context, position))
                 //intent.putExtra("image_name", dataList[position].photo) // put image data in Intent
                 //context.startActivity(intent) // start Intent
-            }
-
-
+            })
         }
         /*
         holder.apply{
@@ -104,6 +99,4 @@ class GalleryAdapter(val context: Context?, private val datasetList : MutableLis
         //                .show()
         //        }
     }
-
 }
-

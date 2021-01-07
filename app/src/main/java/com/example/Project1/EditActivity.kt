@@ -1,11 +1,15 @@
 package com.example.project1
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Rect
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.activity_edit.*
 import java.util.*
 

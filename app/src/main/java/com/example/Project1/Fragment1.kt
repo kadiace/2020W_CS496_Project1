@@ -1,18 +1,17 @@
 package com.example.project1
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.android.synthetic.main.fragment_1.*
-import java.util.*
-import kotlin.collections.ArrayList
+
 
 /**
  * A simple [Fragment] subclass.
@@ -35,23 +34,41 @@ class Fragment1 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         fab.setOnClickListener {
             // Change Activity.
             val intent = Intent(context, AddActivity::class.java)
             activity?.startActivityForResult(intent, 0)
         }
 
-        // adapting recyclerview.
-        phone_book_list.layoutManager = LinearLayoutManager(context)
-        val search = search_name.text.toString()
-        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> PhoneBookListAdapter(search, it1, it) } }
+        search_name.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                var searchList : ArrayList<PhoneBookData> = arrayListOf()
+                bookDataList?.forEachIndexed {index, item ->
+                    if (item.name!!.contains(s, true)) {
+                        searchList.add(item)
+                    }
+                }
+                // adapting recyclerview.
+                if (searchList.isEmpty()) {
+                    phone_book_list.adapter = bookDataList?.let { it ->
+                        context?.let { it1 -> PhoneBookListAdapter(it1, it) }}
+                    phone_book_list.layoutManager = LinearLayoutManager(context)
+                } else {
+                    phone_book_list.adapter = context?.let { it1 -> PhoneBookListAdapter(it1, searchList) }
+                    phone_book_list.layoutManager = LinearLayoutManager(context)
+                }
+            }
+            override fun afterTextChanged(s: Editable) {}
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         bookDataList = BookDataList.getInstance()
         phone_book_list.layoutManager = LinearLayoutManager(context)
-        phone_book_list.adapter = bookDataList?.let { it -> context?.let { it1 -> PhoneBookListAdapter(
-            null.toString(), it1, it) } }
+        phone_book_list.adapter = bookDataList?.let { it ->
+            context?.let { it1 -> PhoneBookListAdapter(it1, it) } }
     }
 }

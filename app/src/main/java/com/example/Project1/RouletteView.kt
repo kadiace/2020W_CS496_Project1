@@ -18,7 +18,7 @@ class RouletteView@JvmOverloads constructor(
     defStyle: Int = 0
 ) : View(context, attrs, defStyle){
 
-
+    var radOfText = 0f
     var angle = 360f
     var startAngle = 0f
     private var itemList: ArrayList<String> = ArrayList()
@@ -71,12 +71,17 @@ class RouletteView@JvmOverloads constructor(
 
         val paintList = listOf<Paint>(paintA, paintB, paintC)
 
+        paintHand.textSize = 30f
+
         if (itemList.size!=0){
             itemList.forEachIndexed { index, item ->
+                val radius : Double = angleToradius((startAngle+angle*(index+0.5)).toFloat())
                 canvas?.drawArc(pos_center-200, pos_center-200,
                     pos_center+200, pos_center+200, startAngle+angle*index,
                     angle, true, paintList[index.rem(3)])
-            }
+                canvas?.drawText(item, (pos_center + radOfText*Math.cos(radius)).toFloat(),
+                    (pos_center + radOfText*Math.sin(radius)).toFloat(), paintHand)
+               }
         }
 
         canvas?.drawArc(pos_center-40f, pos_center-220f,
@@ -89,7 +94,13 @@ class RouletteView@JvmOverloads constructor(
     fun manageCircle (itemList : ArrayList<String>) {
         this.itemList = itemList
         this.angle = 360f/itemList.size
+        this.radOfText = ((200/(1+1/Math.sin(angleToradius(this.angle/2))))
+                /Math.sin(angleToradius(this.angle/2))).toFloat()
         invalidate()
+    }
+
+    fun angleToradius (angle: Float) : Double {
+        return (angle*Math.PI/180).toDouble()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

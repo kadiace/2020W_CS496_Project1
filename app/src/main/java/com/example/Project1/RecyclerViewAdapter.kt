@@ -10,6 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_add.*
+import kotlinx.android.synthetic.main.activity_item.*
 import kotlinx.android.synthetic.main.phonebook_item.view.*
 import kotlin.text.contains as textContains
 
@@ -22,7 +25,7 @@ class PhoneBookViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     }
 }
 
-class PhoneBookListAdapter(val search : String, val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
+class PhoneBookListAdapter(val mContext: Context, val itemList: List<PhoneBookData>) : RecyclerView.Adapter<PhoneBookViewHolder>() {
     override fun getItemCount() : Int {
         return itemList.size
     }
@@ -40,12 +43,11 @@ class PhoneBookListAdapter(val search : String, val mContext: Context, val itemL
 
         val ITEM_CODE = 1
         val item = itemList[position]
-        if (item.name!!.textContains(search, true))
-        {
-            holder.apply {
-                bind(item)
-            }
+        holder.apply {
+            bind(item)
         }
+
+        // call button click event
         holder.view.call_button.setOnClickListener{
             var phoneNumber = "tel:"
             phoneNumber += item.number?.get(0)
@@ -64,6 +66,8 @@ class PhoneBookListAdapter(val search : String, val mContext: Context, val itemL
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(phoneNumber))
             mContext.startActivity(intent)
         }
+
+        // item click event
         holder.itemView.setOnClickListener{
 
             // Set context, intent.

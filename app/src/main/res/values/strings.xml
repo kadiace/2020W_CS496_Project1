@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Project1</string>
+    <string name="app_name">친해지길 바래</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="appbar_scrolling_view_behavior" translatable="false">
         com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior

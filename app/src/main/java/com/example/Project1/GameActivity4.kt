@@ -31,8 +31,13 @@ class GameActivity4 : AppCompatActivity() {
             else {
                 itemList.forEachIndexed { index, item ->
 
-                    if (rouletteView.startAngle+rouletteView.angle*index < 270
-                        && 270 < rouletteView.startAngle+rouletteView.angle*(index+1)) {
+                    if ((rouletteView.startAngle+rouletteView.angle*index < 270
+                                && 270 < rouletteView.startAngle+rouletteView.angle*(index+1))) {
+                        val answer : String = "$item 당첨!"
+                        answer_text.text = answer
+                    }
+                    else if ((rouletteView.startAngle+rouletteView.angle*index < 630
+                                && 630 < rouletteView.startAngle+rouletteView.angle*(index+1))) {
                         val answer : String = "$item 당첨!"
                         answer_text.text = answer
                     }

@@ -2,11 +2,11 @@ package com.example.project1
 
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_item.*
-import java.util.*
+import java.util.ArrayList
 
 class ItemActivity : AppCompatActivity() {
 
@@ -27,6 +27,25 @@ class ItemActivity : AppCompatActivity() {
 
         text_name.text = name
         text_number.text = number
+
+        call_button.setOnClickListener{
+            var phoneNumber = "tel:"
+            phoneNumber += number?.get(0)
+            phoneNumber += number?.get(1)
+            phoneNumber += number?.get(2)
+            phoneNumber += "-"
+            phoneNumber += number?.get(3)
+            phoneNumber += number?.get(4)
+            phoneNumber += number?.get(5)
+            phoneNumber += number?.get(6)
+            phoneNumber += "-"
+            phoneNumber += number?.get(7)
+            phoneNumber += number?.get(8)
+            phoneNumber += number?.get(9)
+            phoneNumber += number?.get(10)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(phoneNumber))
+            startActivity(intent)
+        }
 
 
         edit_button.setOnClickListener{
@@ -54,24 +73,6 @@ class ItemActivity : AppCompatActivity() {
             finish();
         }
 
-        call_button.setOnClickListener{
-            var phoneNumber = "tel:"
-            phoneNumber += number?.get(0)
-            phoneNumber += number?.get(1)
-            phoneNumber += number?.get(2)
-            phoneNumber += "-"
-            phoneNumber += number?.get(3)
-            phoneNumber += number?.get(4)
-            phoneNumber += number?.get(5)
-            phoneNumber += number?.get(6)
-            phoneNumber += "-"
-            phoneNumber += number?.get(7)
-            phoneNumber += number?.get(8)
-            phoneNumber += number?.get(9)
-            phoneNumber += number?.get(10)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(phoneNumber))
-            startActivity(intent)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

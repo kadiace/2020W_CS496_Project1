@@ -1,10 +1,14 @@
 package com.example.project1
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_game1.*
 import kotlinx.android.synthetic.main.activity_game1_list_item.view.*
 import org.jetbrains.anko.toast
+
 
 class GameActivity1 : AppCompatActivity() {
     private var start_flag : Int = 0
@@ -93,6 +97,14 @@ class GameActivity1 : AppCompatActivity() {
             picked_con_text.text=""
         }
         //scaleImage(card_back_view)
+
+        random_cond_btn.setOnClickListener{
+            setRandomCondition()
+        }
+
+        delete_btn.setOnClickListener{
+            deleteCondition()
+        }
     }
 
     private fun throwCard() : Pair<Int, String>{
@@ -113,6 +125,47 @@ class GameActivity1 : AppCompatActivity() {
                 return Pair(remainnum, pick_card)
             }
         }
+    }
+
+    private val conditions = listOf(
+         "청바지", "모자", "후드", "안경", "귀걸이", "솔로", "커플", "군필", "과대", "모두",
+        "슬리퍼", "운동화", "16이상", "동잠러", "댄동", "방금 웃은 사람", "단발", "장발"
+    )
+
+    fun setRandomCondition(){
+        //var pick_cond: List<String> = conditions.shuffled().take(14)
+        card_A.condition_text.setText(conditions[0])
+        card_2.condition_text.setText(conditions[1])
+        card_3.condition_text.setText(conditions[2])
+        card_4.condition_text.setText(conditions[3])
+        card_5.condition_text.setText(conditions[4])
+        card_6.condition_text.setText(conditions[5])
+        card_7.condition_text.setText(conditions[6])
+        card_8.condition_text.setText(conditions[7])
+        card_9.condition_text.setText(conditions[8])
+        card_10.condition_text.setText(conditions[9])
+        card_J.condition_text.setText(conditions[10])
+        card_Q.condition_text.setText(conditions[11])
+        card_K.condition_text.setText(conditions[12])
+        card_Joker.condition_text.setText(conditions[13])
+
+    }
+
+    fun deleteCondition(){
+        card_A.condition_text.setText("")
+        card_2.condition_text.setText("")
+        card_3.condition_text.setText("")
+        card_4.condition_text.setText("")
+        card_5.condition_text.setText("")
+        card_6.condition_text.setText("")
+        card_7.condition_text.setText("")
+        card_8.condition_text.setText("")
+        card_9.condition_text.setText("")
+        card_10.condition_text.setText("")
+        card_J.condition_text.setText("")
+        card_Q.condition_text.setText("")
+        card_K.condition_text.setText("")
+        card_Joker.condition_text.setText("")
     }
 
     fun isAllConditionFilled() : Boolean{
